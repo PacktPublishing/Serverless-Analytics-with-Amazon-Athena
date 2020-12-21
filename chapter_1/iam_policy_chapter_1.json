@@ -12,6 +12,7 @@
                 "s3:CreateBucket",
                 "glue:DeleteTable",
                 "s3:ListBucket",
+                "athena:*",
                 "s3:AbortMultipartUpload",
                 "glue:CreatePartition",
                 "s3:DeleteObject",
@@ -32,6 +33,8 @@
                 "glue:DeletePartition"
             ],
             "Resource": [
+                "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*",
                 "arn:aws:s3:::<YOUR_BUCKET_NAME>",
                 "arn:aws:s3:::<YOUR_BUCKET_NAME>/*",
                 "arn:aws:glue:*:*:table/packt_serverless_analytics/*",
@@ -59,8 +62,10 @@
             "Sid": "VisualEditor2",
             "Effect": "Allow",
             "Action": [
+                "athena:ListDataCatalogs",
                 "s3:ListAllMyBuckets",
-                "s3:ListJobs"
+                "s3:ListJobs",
+                "athena:ListWorkGroups"
             ],
             "Resource": "*"
         }

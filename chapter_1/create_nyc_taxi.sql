@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE `nyc_taxi`(
+CREATE EXTERNAL TABLE `packt_serverless_analytics`.`nyc_taxi`(
   `vendorid` bigint, 
   `tpep_pickup_datetime` string, 
   `tpep_dropoff_datetime` string, 
@@ -26,17 +26,9 @@ OUTPUTFORMAT
 LOCATION
   's3://packt-serverless-analytics/tables/nyc_taxi/'
 TBLPROPERTIES (
-  'CrawlerSchemaDeserializerVersion'='1.0', 
-  'CrawlerSchemaSerializerVersion'='1.0', 
-  'UPDATED_BY_CRAWLER'='packt_serverless_anaytics_chapter_1', 
   'areColumnsQuoted'='false', 
-  'averageRecordSize'='144', 
-  'classification'='csv', 
   'columnsOrdered'='true', 
   'compressionType'='gzip', 
-  'delimiter'=',', 
-  'objectCount'='1', 
-  'recordCount'='47483', 
-  'sizeKey'='10206684', 
+  'delimiter'=',',
   'skip.header.line.count'='1', 
   'typeOfData'='file')
