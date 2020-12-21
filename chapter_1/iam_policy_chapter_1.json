@@ -5,23 +5,58 @@
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
+                "glue:DeleteDatabase",
+                "glue:GetPartitions",
+                "s3:ListBucketVersions",
+                "glue:UpdateTable",
+                "s3:CreateBucket",
+                "glue:DeleteTable",
+                "s3:ListBucket",
+                "s3:AbortMultipartUpload",
+                "glue:CreatePartition",
+                "s3:DeleteObject",
+                "glue:UpdatePartition",
+                "s3:ListBucketMultipartUploads",
+                "glue:UpdateDatabase",
+                "glue:CreateTable",
+                "glue:GetTables",
+                "glue:BatchGetPartition",
+                "glue:GetDatabases",
+                "s3:ListMultipartUploadParts",
+                "glue:GetTable",
+                "glue:GetDatabase",
+                "s3:PutObject",
+                "s3:GetObject",
+                "glue:GetPartition",
+                "glue:CreateDatabase",
+                "glue:DeletePartition"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<YOUR_BUCKET_NAME>",
+                "arn:aws:s3:::<YOUR_BUCKET_NAME>/*",
+                "arn:aws:glue:*:*:table/packt-serverless-analytics/*",
+                "arn:aws:glue:*:*:database/packt-serverless-analytics",
+                "arn:aws:glue:*:*:catalog"
+            ]
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
                 "s3:PutObject",
                 "s3:GetObject",
                 "s3:ListBucketMultipartUploads",
                 "s3:AbortMultipartUpload",
                 "s3:ListBucketVersions",
+                "s3:CreateBucket",
                 "s3:ListBucket",
                 "s3:DeleteObject",
                 "s3:ListMultipartUploadParts"
             ],
-            "Resource": [
-                "arn:aws:s3:::packt-serverless-analytics",
-                "arn:aws:s3:::packt-serverless-analytics/*",
-                "arn:aws:s3:*:888889908458:job/*"
-            ]
+            "Resource": "arn:aws:s3:*:<YOUR_ACCOUNT_NUMBER>:job/*"
         },
         {
-            "Sid": "VisualEditor1",
+            "Sid": "VisualEditor2",
             "Effect": "Allow",
             "Action": [
                 "s3:ListAllMyBuckets",
