@@ -34,8 +34,8 @@
             "Resource": [
                 "arn:aws:s3:::<YOUR_BUCKET_NAME>",
                 "arn:aws:s3:::<YOUR_BUCKET_NAME>/*",
-                "arn:aws:glue:*:*:table/packt-serverless-analytics/*",
-                "arn:aws:glue:*:*:database/packt-serverless-analytics",
+                "arn:aws:glue:*:*:table/packt_serverless_analytics/*",
+                "arn:aws:glue:*:*:database/packt_serverless_analytics",
                 "arn:aws:glue:*:*:catalog"
             ]
         },
