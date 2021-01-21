@@ -1,0 +1,119 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "IamRolesPolicyPermissions",
+      "Action": [
+        "iam:CreatePolicy",
+        "iam:CreateRole",
+        "iam:GetPolicy",
+        "iam:GetRole",
+        "iam:GetRolePolicy",
+        "iam:ListAttachedRolePolicies",
+        "iam:ListGroups",
+        "iam:ListPolicies",
+        "iam:ListRolePolicies",
+        "iam:ListRoles",
+        "iam:ListUsers",
+        "iam:PutRolePolicy"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:iam:*:*:*"
+    },
+    {
+        "Sid": "CloudwatchLogsPermissions",
+        "Effect": "Allow",
+        "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+        ],
+        "Resource": [
+            "arn:aws:logs:*:*:/aws-glue/*"
+        ]
+    },
+    {
+      "Sid": "S3BucketPermissions",
+      "Action": [
+        "s3:GetBucketAcl",
+        "s3:GetBucketLocation",
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket"
+      ],
+      "Effect": "Allow",
+      "Resource": [ "arn:aws:s3:::*" ]
+    },
+    {
+      "Sid": "S3ObjectPermissions",
+      "Action": [
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::*/*"
+    },
+    {
+      "Sid": "GlueCrawlerPermissions",
+      "Action": [
+        "glue:CreateCrawler",
+        "glue:CreateDatabase",
+        "glue:CreatePartition",
+        "glue:CreateSchema",
+        "glue:CreateTable",
+        "glue:DeleteCrawler",
+        "glue:DeleteDatabase",
+        "glue:DeletePartition",
+        "glue:DeleteSchema",
+        "glue:DeleteSchemaVersions",
+        "glue:DeleteTable",
+        "glue:GetClassifier",
+        "glue:GetClassifiers",
+        "glue:GetConnection",
+        "glue:GetConnections",
+        "glue:GetCrawler",
+        "glue:GetCrawlerMetrics",
+        "glue:GetCrawlers",
+        "glue:GetDatabase",
+        "glue:GetDatabases",
+        "glue:GetPartition",
+        "glue:GetPartitions",
+        "glue:GetSchema",
+        "glue:GetSchemaVersion",
+        "glue:GetTable",
+        "glue:GetTableVersion",
+        "glue:GetTableVersions",
+        "glue:GetTables",
+        "glue:ListCrawlers",
+        "glue:ListSchemas",
+        "glue:PutSchemaVersionMetadata",
+        "glue:StartCrawler",
+        "glue:StartCrawlerSchedule",
+        "glue:StopCrawler",
+        "glue:TagResource",
+        "glue:UntagResource",
+        "glue:UpdateCrawler",
+        "glue:UpdatePartition",
+        "glue:UpdateSchema",
+        "glue:UpdateTable"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+       "Sid" : "PassRolePermissions",
+       "Action": [
+           "iam:PassRole"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:iam::*:role/AWSGlueServiceRole*",
+       "Condition": {
+           "StringLike": {
+               "iam:PassedToService": [
+                   "glue.amazonaws.com"
+               ]
+           }
+       }
+    }
+  ]
+}
