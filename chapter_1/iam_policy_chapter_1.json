@@ -6,23 +6,11 @@
             "Effect": "Allow",
             "Action": [
                 "athena:ListDataCatalogs",
+                "s3:ListAllMyBuckets",
+                "s3:ListJobs",
                 "athena:ListWorkGroups"
             ],
             "Resource": "*"
-        },
-        {
-            "Sid": "VisualEditor1",
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListAllMyBuckets",
-                "s3:ListJobs"
-            ],
-            "Resource": "*",
-            "Condition": {
-                "BoolIfExists": {
-                    "aws:MultiFactorAuthPresent": "true"
-                }
-            }
         },
         {
             "Sid": "VisualEditor2",
