@@ -18,7 +18,7 @@ echo "using WORKGROUP: ${WORKGROUP}"
 set +x
 
 echo "Downloading earthquakes.csv from ESRI github repository."
-wget https://github.com/Esri/gis-tools-for-hadoop/blob/master/samples/data/earthquake-data/earthquakes.csv
+wget https://github.com/Esri/gis-tools-for-hadoop/raw/master/samples/data/earthquake-data/earthquakes.csv
 
 echo "Uploading earthquakes.csz to S3 bucket ${BUCKET}"
 aws s3 cp ./earthquakes.csv s3://$BUCKET/chapter_3/tables/earthquakes/
@@ -27,7 +27,7 @@ echo "Removing earthquakes.csv."
 rm earthquakes.csv
 
 echo "Downloading earthquakes.csv from ESRI github repository."
-wget https://github.com/Esri/gis-tools-for-hadoop/blob/master/samples/data/counties-data/california-counties.json
+wget https://github.com/Esri/gis-tools-for-hadoop/raw/master/samples/data/counties-data/california-counties.json
 
 echo "Uploading california-counties.json to S3 bucket ${BUCKET}"
 aws s3 cp ./california-counties.json s3://$BUCKET/chapter_3/tables/california-counties/
