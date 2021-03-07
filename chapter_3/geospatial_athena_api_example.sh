@@ -42,7 +42,7 @@ echo "Removing california-counties.json.gz."
 rm california-counties.json.gz
 
 read -d '' create_earthquakes_table << EndOfMessage
-CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.earthquakes
+CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.chapter_3_earthquakes
 (
  earthquake_date string,
  latitude double,
@@ -65,7 +65,7 @@ EndOfMessage
 
 
 read -d '' create_counties_table << EndOfMessage
-CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.counties
+CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.chapter_3_counties
  (
  Name string,
  BoundaryShape binary
