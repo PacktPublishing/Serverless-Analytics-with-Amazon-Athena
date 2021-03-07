@@ -20,26 +20,20 @@ set +x
 echo "Downloading earthquakes.csv from ESRI github repository."
 wget https://github.com/Esri/gis-tools-for-hadoop/blob/master/samples/data/earthquake-data/earthquakes.csv
 
-echo "Compressing earthquakes.csv with gzip."
-gzip earthquakes.csv
+echo "Uploading earthquakes.csz to S3 bucket ${BUCKET}"
+aws s3 cp ./earthquakes.csv s3://$BUCKET/chapter_3/tables/earthquakes/
 
-echo "Uploading earthquakes.csz.gz to S3 bucket ${BUCKET}"
-aws s3 cp ./earthquakes.csv.gz s3://$BUCKET/chapter_3/tables/earthquakes/
-
-echo "Removing earthquakes.csv.gz."
-rm earthquakes.csv.gz
+echo "Removing earthquakes.csv."
+rm earthquakes.csv
 
 echo "Downloading earthquakes.csv from ESRI github repository."
 wget https://github.com/Esri/gis-tools-for-hadoop/blob/master/samples/data/counties-data/california-counties.json
 
-echo "Compressing california-counties.json with gzip."
-gzip california-counties.json
+echo "Uploading california-counties.json to S3 bucket ${BUCKET}"
+aws s3 cp ./california-counties.json s3://$BUCKET/chapter_3/tables/california-counties/
 
-echo "Uploading california-counties.json.gz to S3 bucket ${BUCKET}"
-aws s3 cp ./california-counties.json.gz s3://$BUCKET/chapter_3/tables/california-counties/
-
-echo "Removing california-counties.json.gz."
-rm california-counties.json.gz
+echo "Removing california-counties.json."
+rm california-counties.json
 
 read -d '' create_earthquakes_table << EndOfMessage
 CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.chapter_3_earthquakes
@@ -58,9 +52,7 @@ CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.chapter_3_earthqu
  eventid string
 )
 ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
-STORED AS TEXTFILE LOCATION 's3://${BUCKET}/chapter_3/tables/earthquakes/'
-TBLPROPERTIES (
-  'compressionType'='gzip');
+STORED AS TEXTFILE LOCATION 's3://${BUCKET}/chapter_3/tables/earthquakes/';
 EndOfMessage
 
 
@@ -73,9 +65,7 @@ CREATE external TABLE IF NOT EXISTS packt_serverless_analytics.chapter_3_countie
 ROW FORMAT SERDE 'com.esri.hadoop.hive.serde.JsonSerde'
 STORED AS INPUTFORMAT 'com.esri.json.hadoop.EnclosedJsonInputFormat'
 OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
-LOCATION 's3://${BUCKET}/chapter_3/tables/california-counties/'
-TBLPROPERTIES (
-  'compressionType'='gzip');
+LOCATION 's3://${BUCKET}/chapter_3/tables/california-counties/';
 EndOfMessage
 
 echo "Preparing to run create_earthquakes_table query:"
