@@ -5,15 +5,13 @@
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "athena:ListDataCatalogs",
                 "s3:ListAllMyBuckets",
-                "s3:ListJobs",
-                "athena:ListWorkGroups"
+                "s3:ListJobs"
             ],
             "Resource": "*"
         },
         {
-            "Sid": "VisualEditor2",
+            "Sid": "VisualEditor1",
             "Effect": "Allow",
             "Action": [
                 "glue:BatchCreatePartition",
@@ -41,28 +39,73 @@
                 "s3:GetObject",
                 "glue:GetPartition",
                 "glue:CreateDatabase",
-                "glue:DeletePartition"
+                "glue:DeletePartition",
+                "cloudshell:*"
             ],
             "Resource": [
+                "arn:aws:s3:::<YOUR_S3_BUCKET>/*",
+                "arn:aws:s3:::<YOUR_S3_BUCKET>",
                 "arn:aws:glue:*:*:table/*/*",
                 "arn:aws:glue:*:*:database/packt_serverless_analytics",
                 "arn:aws:glue:*:*:catalog",
-                "arn:aws:s3:::<YOUR_S3_BUCKET_NAME>",
-                "arn:aws:s3:::<YOUR_S3_BUCKET_NAME>/*"
+                "arn:aws:cloudshell:*:*:environment/*"
             ]
         },
         {
-            "Sid": "VisualEditor3",
+            "Sid": "VisualEditor2",
             "Effect": "Allow",
             "Action": "s3:GetBucketLocation",
             "Resource": "arn:aws:s3:::*"
         },
         {
-            "Sid": "VisualEditor4",
             "Effect": "Allow",
-            "Action": "athena:*",
+            "Action": [
+                "athena:ListEngineVersions",
+                "athena:ListWorkGroups",
+                "athena:GetExecutionEngine",
+                "athena:GetExecutionEngines",
+                "athena:GetNamespace",
+                "athena:GetCatalogs",
+                "athena:GetNamespaces",
+                "athena:ListTagsForResource",
+                "athena:GetTables",
+                "athena:GetTable"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:StartQueryExecution",
+                "athena:GetQueryResults",
+                "athena:DeleteNamedQuery",
+                "athena:GetNamedQuery",
+                "athena:ListQueryExecutions",
+                "athena:StopQueryExecution",
+                "athena:GetQueryResultsStream",
+                "athena:ListNamedQueries",
+                "athena:CreateNamedQuery",
+                "athena:GetQueryExecution",
+                "athena:BatchGetNamedQuery",
+                "athena:BatchGetQueryExecution"
+            ],
             "Resource": [
                 "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:*:workgroup/packt-*",
+                "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:DeleteWorkGroup",
+                "athena:UpdateWorkGroup",
+                "athena:GetWorkGroup",
+                "athena:CreateWorkGroup"
+            ],
+            "Resource": [
+                "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:*:workgroup/packt-*",
                 "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*"
             ]
         }
