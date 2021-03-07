@@ -41,7 +41,7 @@ aws s3 cp ./california-counties.json.gz s3://$BUCKET/chapter_3/tables/california
 echo "Removing california-counties.json.gz."
 rm california-counties.json.gz
 
-create_earthquakes_table << EndOfMessage
+read -d '' create_earthquakes_table << EndOfMessage
 CREATE external TABLE IF NOT EXISTS earthquakes
 (
  earthquake_date string,
@@ -64,7 +64,7 @@ TBLPROPERTIES (
 EndOfMessage
 
 
-create_counties_table << EndOfMessage
+read -d '' create_counties_table << EndOfMessage
 CREATE external TABLE IF NOT EXISTS counties
  (
  Name string,
