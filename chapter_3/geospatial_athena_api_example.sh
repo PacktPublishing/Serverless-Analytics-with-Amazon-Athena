@@ -92,3 +92,13 @@ aws athena start-query-execution \
     --query-string "${create_counties_table}" \
     --work-group "${WORKGROUP}"
 
+#
+# While we did not automate checking the status or getting the results of queries in this script
+# you can do so by using the following commands:
+#
+# aws athena get-query-execution  --query-execution-id <QUERY_EXECUTION_ID>
+# aws athena get-query-results  --query-execution-id <QUERY_EXECUTION_ID>
+#
+# Its normal for DDL (aka create table) queries to return no results for 'get-query-results'.
+# All types of queries will return useful info when calling 'get-query-execution'.
+#
