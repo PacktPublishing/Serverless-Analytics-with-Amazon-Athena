@@ -72,15 +72,12 @@ array=( yellow_tripdata_2017-01.csv
 for i in "${array[@]}"
 do
     FILE=$i
-    ZIP_FILE="${FILE}.gz"
     echo "Downloading ${FILE} from nyc-tlc"
     wget https://s3.amazonaws.com/nyc-tlc/trip+data/${FILE}
-    echo "Performing gzip on ${FILE}"
-    gzip ${FILE}
-    echo "Uploading ${ZIP_FILE} to S3 bucket ${BUCKET}"
-    aws s3 cp ./${ZIP_FILE} s3://$BUCKET/chapter_7/tables/nyc_taxi_csv/
-    echo "Cleaning up file ${ZIP_FILE}"
-    rm $ZIP_FILE
+    echo "Uploading ${FILE} to S3 bucket ${BUCKET}"
+    aws s3 cp ./${FILE} s3://$BUCKET/chapter_7/tables/nyc_taxi_csv/
+    echo "Cleaning up file ${FILE}"
+    rm $FILE
 done
 
 
@@ -177,7 +174,6 @@ LOCATION
 TBLPROPERTIES (
   'areColumnsQuoted'='false', 
   'columnsOrdered'='true', 
-  'compressionType'='gzip', 
   'delimiter'=',',
   'skip.header.line.count'='1', 
   'typeOfData'='file');
