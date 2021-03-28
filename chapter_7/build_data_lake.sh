@@ -144,25 +144,25 @@ LOCATION 's3://${BUCKET}/chapter_7/tables/california-counties/';
 EndOfMessage
 
 read -d '' create_nyc_taxi_csv << EndOfMessage
-CREATE EXTERNAL TABLE `packt_serverless_analytics`.`chapter_7_nyc_taxi_csv`(
-  `vendorid` bigint, 
-  `tpep_pickup_datetime` string, 
-  `tpep_dropoff_datetime` string, 
-  `passenger_count` bigint, 
-  `trip_distance` double, 
-  `ratecodeid` bigint, 
-  `store_and_fwd_flag` string, 
-  `pulocationid` bigint, 
-  `dolocationid` bigint, 
-  `payment_type` bigint, 
-  `fare_amount` double, 
-  `extra` double, 
-  `mta_tax` double, 
-  `tip_amount` double, 
-  `tolls_amount` double, 
-  `improvement_surcharge` double, 
-  `total_amount` double, 
-  `congestion_surcharge` double)
+CREATE EXTERNAL TABLE packt_serverless_analytics.chapter_7_nyc_taxi_csv(
+  vendorid bigint, 
+  tpep_pickup_datetime string, 
+  tpep_dropoff_datetime string, 
+  passenger_count bigint, 
+  trip_distance double, 
+  ratecodeid bigint, 
+  store_and_fwd_flag string, 
+  pulocationid bigint, 
+  dolocationid bigint, 
+  payment_type bigint, 
+  fare_amount double, 
+  extra double, 
+  mta_tax double, 
+  tip_amount double, 
+  tolls_amount double, 
+  improvement_surcharge double, 
+  total_amount double, 
+  congestion_surcharge double)
 ROW FORMAT DELIMITED 
   FIELDS TERMINATED BY ',' 
 STORED AS INPUTFORMAT 
@@ -241,14 +241,3 @@ echo $create_nyc_taxi_parquet
 aws athena start-query-execution \
     --query-string "${create_nyc_taxi_parquet}" \
     --work-group "${WORKGROUP}"
-
-#
-# While we did not automate checking the status or getting the results of queries in this script
-# you can do so by using the following commands:
-#
-# aws athena get-query-execution  --query-execution-id <QUERY_EXECUTION_ID>
-# aws athena get-query-results  --query-execution-id <QUERY_EXECUTION_ID>
-#
-# Its normal for DDL (aka create table) queries to return no results for 'get-query-results'.
-# All types of queries will return useful info when calling 'get-query-execution'.
-#
