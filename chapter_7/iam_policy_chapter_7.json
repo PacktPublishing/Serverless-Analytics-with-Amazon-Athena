@@ -76,6 +76,7 @@
                 "sagemaker:StopNotebookInstance",
                 "sagemaker:CreatePresignedNotebookInstanceUrl",
                 "glue:CreateDatabase",
+                "sagemaker:StartNotebookInstance",
                 "athena:GetQueryExecution",
                 "athena:BatchGetNamedQuery",
                 "glue:DeletePartition",
