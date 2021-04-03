@@ -80,7 +80,9 @@
                 "athena:GetQueryExecution",
                 "athena:BatchGetNamedQuery",
                 "glue:DeletePartition",
-                "athena:BatchGetQueryExecution"
+                "athena:BatchGetQueryExecution",
+                "sagemaker:DescribeNotebookInstance",
+                "sagemaker:ListTags"
             ],
             "Resource": [
                 "arn:aws:s3:::<YOUR_S3_BUCKET>/*",
