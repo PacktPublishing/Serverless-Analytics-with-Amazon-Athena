@@ -1,0 +1,122 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "athena:ListEngineVersions",
+                "s3:ListJobs",
+                "sagemaker:ListNotebookInstanceLifecycleConfigs",
+                "athena:GetNamespace",
+                "iam:ListRoles",
+                "athena:ListWorkGroups",
+                "sagemaker:ListTrainingJobs",
+                "athena:GetCatalogs",
+                "athena:ListTagsForResource",
+                "athena:GetNamespaces",
+                "s3:ListAllMyBuckets",
+                "athena:GetExecutionEngine",
+                "kms:ListAliases",
+                "sagemaker:ListModels",
+                "cloudshell:CreateEnvironment",
+                "athena:GetExecutionEngines",
+                "athena:GetTables",
+                "athena:GetTable",
+                "sagemaker:ListNotebookInstances",
+                "sagemaker:ListEndpoints",
+                "sagemaker:ListCodeRepositories"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "glue:BatchCreatePartition",
+                "athena:StartQueryExecution",
+                "glue:DeleteDatabase",
+                "glue:GetPartitions",
+                "s3:ListBucketVersions",
+                "glue:UpdateTable",
+                "athena:GetQueryResults",
+                "s3:CreateBucket",
+                "glue:DeleteTable",
+                "s3:ListBucket",
+                "athena:DeleteNamedQuery",
+                "athena:GetNamedQuery",
+                "athena:ListQueryExecutions",
+                "sagemaker:CreateNotebookInstance",
+                "sagemaker:UpdateNotebookInstance",
+                "iam:PassRole",
+                "s3:AbortMultipartUpload",
+                "athena:StopQueryExecution",
+                "sagemaker:DeleteNotebookInstanceLifecycleConfig",
+                "glue:CreatePartition",
+                "s3:DeleteObject",
+                "glue:UpdatePartition",
+                "sagemaker:UpdateNotebookInstanceLifecycleConfig",
+                "s3:ListBucketMultipartUploads",
+                "glue:UpdateDatabase",
+                "athena:GetQueryResultsStream",
+                "sagemaker:DeleteNotebookInstance",
+                "glue:CreateTable",
+                "glue:GetTables",
+                "sagemaker:CreateNotebookInstanceLifecycleConfig",
+                "glue:BatchGetPartition",
+                "glue:GetDatabases",
+                "s3:ListMultipartUploadParts",
+                "athena:ListNamedQueries",
+                "glue:GetTable",
+                "glue:GetDatabase",
+                "s3:PutObject",
+                "s3:GetObject",
+                "athena:CreateNamedQuery",
+                "glue:GetPartition",
+                "sagemaker:StopNotebookInstance",
+                "sagemaker:CreatePresignedNotebookInstanceUrl",
+                "glue:CreateDatabase",
+                "athena:GetQueryExecution",
+                "athena:BatchGetNamedQuery",
+                "glue:DeletePartition",
+                "athena:BatchGetQueryExecution"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<YOUR_S3_BUCKET>/*",
+                "arn:aws:s3:::<YOUR_S3_BUCKET>",
+                "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:*:workgroup/packt-*",
+                "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*",
+                "arn:aws:iam::*:role/packet-serverless-analytics-sagemaker",
+                "arn:aws:sagemaker:*:*:notebook-instance-lifecycle-config/packt-serverless-analytics",
+                "arn:aws:sagemaker:*:*:notebook-instance/packt-serverless-analytics",
+                "arn:aws:glue:*:*:table/*/*",
+                "arn:aws:glue:*:*:database/packt_serverless_analytics",
+                "arn:aws:glue:*:*:catalog"
+            ]
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": [
+                "athena:GetWorkGroup",
+                "athena:DeleteWorkGroup",
+                "athena:UpdateWorkGroup",
+                "s3:GetBucketLocation",
+                "athena:CreateWorkGroup"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*",
+                "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:*:workgroup/packt-*",
+                "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": "cloudshell:*",
+            "Resource": "arn:aws:cloudshell:*:*:environment/*"
+        }
+    ]
+}
