@@ -25,7 +25,8 @@
                 "athena:GetTable",
                 "sagemaker:ListNotebookInstances",
                 "sagemaker:ListEndpoints",
-                "sagemaker:ListCodeRepositories"
+                "sagemaker:ListCodeRepositories",
+                "quicksight:*",
             ],
             "Resource": "*"
         },
@@ -120,6 +121,12 @@
             "Effect": "Allow",
             "Action": "cloudshell:*",
             "Resource": "arn:aws:cloudshell:*:*:environment/*"
+        },
+        {
+            "Effect": "Deny",
+            "Action": 
+                "quicksight:Unsubscribe",
+            "Resource": "*"
         }
     ]
 }
