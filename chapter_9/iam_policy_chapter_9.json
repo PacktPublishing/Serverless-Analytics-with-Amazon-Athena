@@ -1,0 +1,104 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "athena:ListEngineVersions",
+                "s3:ListJobs",
+                "athena:GetNamespace",
+                "athena:ListWorkGroups",
+                "athena:GetCatalogs",
+                "athena:ListTagsForResource",
+                "athena:GetNamespaces",
+                "s3:ListAllMyBuckets",
+                "athena:GetExecutionEngine",
+                "kms:ListAliases",
+                "cloudshell:CreateEnvironment",
+                "athena:GetExecutionEngines",
+                "athena:GetTables",
+                "athena:GetTable"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "glue:BatchCreatePartition",
+                "athena:StartQueryExecution",
+                "glue:DeleteDatabase",
+                "glue:GetPartitions",
+                "s3:ListBucketVersions",
+                "glue:UpdateTable",
+                "athena:GetQueryResults",
+                "s3:CreateBucket",
+                "glue:DeleteTable",
+                "s3:ListBucket",
+                "athena:DeleteNamedQuery",
+                "athena:GetNamedQuery",
+                "athena:ListQueryExecutions",
+                "iam:PassRole",
+                "s3:AbortMultipartUpload",
+                "athena:StopQueryExecution",
+                "glue:CreatePartition",
+                "s3:DeleteObject",
+                "glue:UpdatePartition",
+                "s3:ListBucketMultipartUploads",
+                "glue:UpdateDatabase",
+                "athena:GetQueryResultsStream",
+                "glue:CreateTable",
+                "glue:GetTables",
+                "glue:BatchGetPartition",
+                "glue:GetDatabases",
+                "s3:ListMultipartUploadParts",
+                "athena:ListNamedQueries",
+                "glue:GetTable",
+                "glue:GetDatabase",
+                "s3:PutObject",
+                "s3:GetObject",
+                "athena:CreateNamedQuery",
+                "glue:GetPartition",
+                "glue:CreateDatabase",
+                "athena:GetQueryExecution",
+                "athena:BatchGetNamedQuery",
+                "glue:DeletePartition",
+                "athena:BatchGetQueryExecution"
+            ],
+            "Resource": [
+                "arn:aws:s3:::<YOUR_S3_BUCKET>/*",
+                "arn:aws:s3:::<YOUR_S3_BUCKET>",
+                "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:*:workgroup/packt-*",
+                "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*",
+                "arn:aws:glue:*:*:table/*/*",
+                "arn:aws:glue:*:*:database/packt_serverless_analytics",
+                "arn:aws:glue:*:*:catalog"
+            ]
+        },
+        {
+            "Sid": "VisualEditor2",
+            "Effect": "Allow",
+            "Action": [
+                "athena:GetWorkGroup",
+                "athena:DeleteWorkGroup",
+                "athena:UpdateWorkGroup",
+                "s3:GetBucketLocation",
+                "athena:CreateWorkGroup"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*",
+                "arn:aws:athena:*:*:workgroup/primary",
+                "arn:aws:athena:*:*:workgroup/packt-*",
+                "arn:aws:athena:*:<YOUR_ACCOUNT_NUMBER>:datacatalog/*"
+            ]
+        },
+        {
+            "Sid": "VisualEditor3",
+            "Effect": "Allow",
+            "Action": "cloudshell:*",
+            "Resource": "arn:aws:cloudshell:*:*:environment/*"
+        }
+    ]
+}
