@@ -1,0 +1,25 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ReadObjectPermissions",
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": [
+                "arn:aws:iam::0123456789:user/luke", 
+                "arn:aws:iam::0123456789:user/leia",
+                "arn:aws:iam::0123456789:user/anakin"
+              ] },
+            "Action": ["s3:ListBucket", "s3:GetObject", "s3:PutObject"],
+            "Resource": ["arn:aws:s3:::packt-serverless-analytics-01234567890",
+                         "arn:aws:s3:::packt-serverless-analytics-01234567890/*"],
+            "Condition":{ 
+               "ForAnyValue:StringEquals":{ 
+                  "aws:CalledVia":[ 
+                     "athena.amazonaws.com"
+                  ]
+               }
+            }
+        }
+    ]
+}
