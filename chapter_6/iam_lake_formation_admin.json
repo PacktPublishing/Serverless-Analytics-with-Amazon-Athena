@@ -1,0 +1,125 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetAccountPasswordPolicy",
+                "iam:GetAccountSummary",
+                "iam:ListAccountAliases",
+                "iam:ListUsers",
+                "kms:ListAliases",
+                "s3:GetAccountPublicAccessBlock",
+                "s3:ListAccessPoints",
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreatePolicy",
+            "Resource": "arn:aws:iam::${Account}:policy/${PolicyNameWithPath}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:AttachRolePolicy",
+                "iam:CreateRole"
+            ],
+            "Resource": "arn:aws:iam::${Account}:role/${RoleNameWithPath}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetUser",
+                "iam:ListAccessKeys",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListUserTags"
+            ],
+            "Resource": "arn:aws:iam::${Account}:user/${UserNameWithPath}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "s3:GetStorageLensConfiguration",
+            "Resource": "arn:aws:s3:${Region}:${Account}:storage-lens/${ConfigId}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketAcl",
+                "s3:GetBucketCORS",
+                "s3:GetBucketLocation",
+                "s3:GetBucketPolicy",
+                "s3:GetBucketPolicyStatus",
+                "s3:GetBucketPublicAccessBlock",
+                "s3:GetBucketVersioning",
+                "s3:GetBucketWebsite",
+                "s3:PutBucketPolicy"
+            ],
+            "Resource": "arn:aws:s3:::${BucketName}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "lakeformation:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "glue:GetPartition",
+                "glue:GetTableVersion",
+                "glue:GetConnection",
+                "glue:GetResourcePolicy",
+                "glue:GetDatabases",
+                "glue:GetDatabase",
+                "glue:GetTables",
+                "glue:GetSchemaVersion",
+                "glue:GetPartitions",
+                "glue:BatchGetPartition",
+                "glue:GetCrawler",
+                "glue:GetSchema",
+                "glue:GetTable",
+                "glue:GetConnections",
+                "glue:GetCrawlers",
+                "glue:UpdateDatabase",
+                "glue:UpdatePartition",
+                "glue:DeletePartition",
+                "glue:CreateSchema",
+                "glue:CreateTable",
+                "glue:DeleteSchema",
+                "glue:CreatePartition",
+                "glue:UpdateTable",
+                "glue:DeleteTable",
+                "glue:UpdateSchema",
+                "glue:PutResourcePolicy",
+                "glue:DeleteResourcePolicy",
+                "glue:ListTriggers",
+                "glue:ListSchemas"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "athena:ListDatabases",
+                "athena:ListWorkGroups",
+                "athena:ListDataCatalogs",
+                "athena:BatchGetQueryExecution",
+                "athena:GetTableMetadata",
+                "athena:GetQueryExecution",
+                "athena:GetDataCatalog",
+                "athena:GetQueryResults",
+                "athena:GetDatabase",
+                "athena:GetWorkGroup",
+                "athena:ListQueryExecutions",
+                "athena:GetQueryResultsStream",
+                "athena:CreateDataCatalog",
+                "athena:DeleteDataCatalog",
+                "athena:StartQueryExecution",
+                "athena:UpdateDataCatalog",
+                "athena:StopQueryExecution"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

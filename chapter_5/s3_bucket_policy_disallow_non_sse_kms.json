@@ -1,0 +1,30 @@
+{
+   "Version":"2012-10-17",
+   "Id":"DenyUncryptedDataInS3Bucket",
+   "Statement":[
+      {
+         "Sid":"DenyUnEncryptedObjectUploads",
+         "Effect":"Deny",
+         "Action":"s3:PutObject",
+         "Principal":"*",
+         "Resource":"arn:aws:s3:::<BUCKET NAME>/*",
+         "Condition":{
+            "Null":{
+               "s3:x-amz-server-side-encryption":true
+            }
+         }
+      },
+      {
+         "Sid":"DenyNonSSEKMSEncryptionHeader",
+         "Effect":"Deny",
+         "Action":"s3:PutObject",
+         "Principal":"*",
+         "Resource":"arn:aws:s3:::<BUCKET NAME>/*",
+         "Condition":{
+            "StringNotEquals":{
+               "s3:x-amz-server-side-encryption":"aws:kms"
+            }
+         }
+      }
+   ]
+}
