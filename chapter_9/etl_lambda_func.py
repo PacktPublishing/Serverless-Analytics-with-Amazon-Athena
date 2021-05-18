@@ -7,14 +7,15 @@ import hashlib
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-CLIENT = boto3.client('athena')
+ATHENA = boto3.client('athena')
+CLOUDWATCH = boto3.client('cloudwatch')
 WORKGROUP = "packt-athena-analytics"
 DATABASE = 'packt_serverless_analytics'
 BASE_TABLE = 'chapter_9_trades'
 ETL_LOCATION = 's3://<YOUR_S3_BUCKET>/chapter_9/'
 
 def lambda_handler(event, context):
-    logger.info('Event Arrived: %s', event)
+    logger.info('Handing event: %s', event)
  
     s3_object = event_to_s3_uri(event)
     logger.info('New data arrived in: %s', s3_object)
@@ -22,10 +23,13 @@ def lambda_handler(event, context):
     ensure_trade_table_exists(DATABASE, BASE_TABLE, ETL_LOCATION)
     import_table = make_temp_import_table(DATABASE, s3_object)
     import_data(DATABASE, BASE_TABLE, import_table)
-    update_trade_summary(DATABASE, BASE_TABLE)
+    trade_summaries = update_trade_summary(DATABASE, BASE_TABLE)
+    num_summaries = publish_trade_summary(trade_summaries)
+    
+    logger.info('Event caused an update to %d trade summaries.', num_summaries)
     
     drop_table(DATABASE, import_table)
-    logger.info('Completed handling event')
+    logger.info('Completed handling event: %s', event)
     return {}
 
 #
@@ -44,7 +48,7 @@ def event_to_s3_uri(event ):
 def run_query(query, wait_seconds = 0):
     logger.info('run_query: Preparing to run query %s', query)
     
-    query_id = CLIENT.start_query_execution(
+    query_id = ATHENA.start_query_execution(
         QueryString=query,
         QueryExecutionContext={
             'Database': DATABASE
@@ -67,7 +71,7 @@ def wait_for_query(query_id, max_wait_seconds = 5):
     state = 'RUNNING'
 
     while (state in ['RUNNING', 'QUEUED'] and max_wait_seconds > 0):
-        query_execution = CLIENT.get_query_execution(QueryExecutionId = query_id)
+        query_execution = ATHENA.get_query_execution(QueryExecutionId = query_id)
 
         try:
             state = query_execution['QueryExecution']['Status']['State']
@@ -200,14 +204,13 @@ def update_trade_summary(database, table_name):
     .replace('DATABASE', database)
     
     query_id = run_query(trade_summary_query, 120)[0]
-    result = read_all_results(query_id)
-    logger.info('update_trade_summary: %s', result)
+    return read_all_results(query_id)
 
 #
 # Helper function to read all results into a dictionary
 #
 def read_all_results(query_id):
-    results_paginator = CLIENT.get_paginator('get_query_results')
+    results_paginator = ATHENA.get_paginator('get_query_results')
     results_iter = results_paginator.paginate(
         QueryExecutionId=query_id,
         PaginationConfig={
@@ -222,3 +225,30 @@ def read_all_results(query_id):
     for datum in data_list[1:]:
         results.append([x['VarCharValue'] for x in datum])
     return [tuple(x) for x in results]
+
+#
+# Helper function that publishes trade summaries to Cloudwatch
+# where we can write alarms for threshold breeches
+#
+def publish_trade_summary(trade_summaries):
+    num_summaries = 0
+    for trade_summary in trade_summaries:
+        num_summaries += 1
+        logger.info('publish_trade_summary: %s', trade_summary)
+        CLOUDWATCH.put_metric_data(
+            MetricData=[
+                {
+                    'MetricName': 'POSITION',
+                    'Dimensions': [
+                        {
+                            'Name': 'SYMBOL',
+                            'Value': trade_summary[0]
+                        },
+                    ],
+                    'Unit': 'None',
+                    'Value': float(trade_summary[1])
+                },
+            ],
+            Namespace='RISK/SUMMARY'
+        )
+    return num_summaries
