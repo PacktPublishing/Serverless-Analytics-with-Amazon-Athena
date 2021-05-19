@@ -69,25 +69,25 @@ def run_query(query, wait_seconds = 0):
 #
 def wait_for_query(query_id, max_wait_seconds = 5):
     state = 'RUNNING'
-
     while (state in ['RUNNING', 'QUEUED'] and max_wait_seconds > 0):
         query_execution = ATHENA.get_query_execution(QueryExecutionId = query_id)
-
+        reason = None
         try:
-            state = query_execution['QueryExecution']['Status']['State']
+            qexec = query_execution['QueryExecution']
+            exec_status = qexec['Status']
+            state = exec_status['State']
             if state == 'FAILED':
+                reason = exec_status['StateChangeReason']
                 logger.warn('wait_for_query: Query %s failed: %s', 
                              query_id, 
-                             query_execution['QueryExecution']['Status']['StateChangeReason'])
-                raise RuntimeError(query_id, query_execution['QueryExecution']['Status']['StateChangeReason'])
+                             reason)
+                raise RuntimeError(query_id, reason)
             elif state == 'SUCCEEDED':
-                return query_execution['QueryExecution']['ResultConfiguration']['OutputLocation']
+                return qexec['ResultConfiguration']['OutputLocation']
         except KeyError:
             pass
-        
         time.sleep(1)
         max_wait_seconds = max_wait_seconds - 1
-        
     return False
 
 #
