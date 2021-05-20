@@ -199,32 +199,18 @@ def update_trade_summary(database, table_name):
         sum(num_shares) 
     FROM
         DATABASE.TABLE_NAME 
-    GROUP BY symbol
+    GROUP BY symbol HAVING sum(num_shares) != 0
     """.replace("TABLE_NAME", table_name)\
     .replace('DATABASE', database)
     
     query_id = run_query(trade_summary_query, 120)[0]
-    return read_all_results(query_id)
-
-#
-# Helper function to read all results into a dictionary
-#
-def read_all_results(query_id):
     results_paginator = ATHENA.get_paginator('get_query_results')
-    results_iter = results_paginator.paginate(
+    return results_paginator.paginate(
         QueryExecutionId=query_id,
         PaginationConfig={
             'PageSize': 1000
         }
     )
-    results = []
-    data_list = []
-    for results_page in results_iter:
-        for row in results_page['ResultSet']['Rows']:
-            data_list.append(row['Data'])
-    for datum in data_list[1:]:
-        results.append([x['VarCharValue'] for x in datum])
-    return [tuple(x) for x in results]
 
 #
 # Helper function that publishes trade summaries to Cloudwatch
@@ -233,22 +219,25 @@ def read_all_results(query_id):
 def publish_trade_summary(trade_summaries):
     num_summaries = 0
     for trade_summary in trade_summaries:
-        num_summaries += 1
-        logger.info('publish_trade_summary: %s', trade_summary)
-        CLOUDWATCH.put_metric_data(
-            MetricData=[
-                {
-                    'MetricName': 'POSITION',
-                    'Dimensions': [
-                        {
-                            'Name': 'SYMBOL',
-                            'Value': trade_summary[0]
-                        },
-                    ],
-                    'Unit': 'None',
-                    'Value': float(trade_summary[1])
-                },
-            ],
-            Namespace='RISK/SUMMARY'
-        )
+        for row in trade_summary['ResultSet']['Rows'][1:]:
+            logger.info('publish_trade_summary: %s', row)
+            symbol = row['Data'][0]['VarCharValue']
+            num_shares = float(row['Data'][1]['VarCharValue'])
+            num_summaries += 1
+            CLOUDWATCH.put_metric_data(
+                MetricData=[
+                    {
+                        'MetricName': 'POSITION',
+                        'Dimensions': [
+                            {
+                                'Name': 'SYMBOL',
+                                'Value': symbol
+                            },
+                        ],
+                        'Unit': 'None',
+                        'Value': num_shares
+                    },
+                ],
+                Namespace='RISK/SUMMARY'
+            )
     return num_summaries
