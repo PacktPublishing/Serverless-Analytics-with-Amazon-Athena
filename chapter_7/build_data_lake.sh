@@ -13,6 +13,8 @@ if [ $# -eq 0 ]
     exit
 fi
 
+echo "Changing to /tmp/ as working directory"
+cd /tmp/
 
 echo "*******************************************************"
 echo "*              Build Chapter 7 Data Lake              *"
