@@ -120,6 +120,20 @@
                 "athena:StopQueryExecution"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/lakeformation.amazonaws.com/AWSServiceRoleForLakeFormation*",
+            "Condition": {"StringLike": {"iam:AWSServiceName": "lakeformation.amazonaws.com"}}
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:AttachRolePolicy",
+                "iam:PutRolePolicy"
+            ],
+            "Resource": "arn:aws:iam::*:role/aws-service-role/lakeformation.amazonaws.com/AWSServiceRoleForLakeFormatio*n"
         }
     ]
 }
