@@ -1,0 +1,8 @@
+#Mon Jun 14 21:32:22 EDT 2021
+configuration*?=D110850B570EE8C3885ED32453317CA8BE1CBD1E
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/ConnectorValidator.java=1623720297907
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/FederationService.java=1623720298049
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/FederationServiceProvider.java=1623720298207
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/ConstraintParser.java=1623720297972
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/LambdaMetadataProvider.java=1623720298290
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/LambdaRecordProvider.java=1623720298136

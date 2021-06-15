@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExampleMetadataHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">athena-example</a> &gt; <a href="index.source.html" class="el_package">com.amazonaws.connectors.athena.example</a> &gt; <span class="el_source">ExampleMetadataHandler.java</span></div><h1>ExampleMetadataHandler.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * athena-example
+ * %%
+ * Copyright (C) 2019 Amazon Web Services
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package com.amazonaws.connectors.athena.example;
+
+import com.amazonaws.athena.connector.lambda.QueryStatusChecker;
+import com.amazonaws.athena.connector.lambda.data.Block;
+import com.amazonaws.athena.connector.lambda.data.BlockAllocator;
+import com.amazonaws.athena.connector.lambda.data.BlockWriter;
+import com.amazonaws.athena.connector.lambda.data.SchemaBuilder;
+import com.amazonaws.athena.connector.lambda.domain.Split;
+import com.amazonaws.athena.connector.lambda.domain.TableName;
+import com.amazonaws.athena.connector.lambda.handlers.MetadataHandler;
+import com.amazonaws.athena.connector.lambda.metadata.GetSplitsRequest;
+import com.amazonaws.athena.connector.lambda.metadata.GetSplitsResponse;
+import com.amazonaws.athena.connector.lambda.metadata.GetTableLayoutRequest;
+import com.amazonaws.athena.connector.lambda.metadata.GetTableRequest;
+import com.amazonaws.athena.connector.lambda.metadata.GetTableResponse;
+import com.amazonaws.athena.connector.lambda.metadata.ListSchemasRequest;
+import com.amazonaws.athena.connector.lambda.metadata.ListSchemasResponse;
+import com.amazonaws.athena.connector.lambda.metadata.ListTablesRequest;
+import com.amazonaws.athena.connector.lambda.metadata.ListTablesResponse;
+import com.amazonaws.athena.connector.lambda.security.EncryptionKeyFactory;
+import com.amazonaws.services.athena.AmazonAthena;
+import com.amazonaws.services.secretsmanager.AWSSecretsManager;
+import org.apache.arrow.util.VisibleForTesting;
+import org.apache.arrow.vector.complex.reader.FieldReader;
+//DO NOT REMOVE - this will not be _unused_ when customers go through the tutorial and uncomment
+//the TODOs
+import org.apache.arrow.vector.types.Types;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.amazonaws.athena.connector.lambda.metadata.ListTablesRequest.UNLIMITED_PAGE_SIZE_VALUE;
+
+/**
+ * This class is part of an tutorial that will walk you through how to build a connector for your
+ * custom data source. The README for this module (athena-example) will guide you through preparing
+ * your development environment, modifying this example Metadatahandler, building, deploying, and then
+ * using your new source in an Athena query.
+ * &lt;p&gt;
+ * More specifically, this class is responsible for providing Athena with metadata about the schemas (aka databases),
+ * tables, and table partitions that your source contains. Lastly, this class tells Athena how to split up reads against
+ * this source. This gives you control over the level of performance and parallelism your source can support.
+ * &lt;p&gt;
+ * For more examples, please see the other connectors in this repository (e.g. athena-cloudwatch, athena-docdb, etc...)
+ */
+public class ExampleMetadataHandler
+        extends MetadataHandler
+{
+<span class="fc" id="L74">    private static final Logger logger = LoggerFactory.getLogger(ExampleMetadataHandler.class);</span>
+
+    /**
+     * used to aid in debugging. Athena will use this name in conjunction with your catalog id
+     * to correlate relevant query errors.
+     */
+    private static final String SOURCE_TYPE = &quot;example&quot;;
+
+    public ExampleMetadataHandler()
+    {
+<span class="nc" id="L84">        super(SOURCE_TYPE);</span>
+<span class="nc" id="L85">    }</span>
+
+    @VisibleForTesting
+    protected ExampleMetadataHandler(EncryptionKeyFactory keyFactory,
+            AWSSecretsManager awsSecretsManager,
+            AmazonAthena athena,
+            String spillBucket,
+            String spillPrefix)
+    {
+<span class="fc" id="L94">        super(keyFactory, awsSecretsManager, athena, SOURCE_TYPE, spillBucket, spillPrefix);</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Used to get the list of schemas (aka databases) that this source contains.
+     *
+     * @param allocator Tool for creating and managing Apache Arrow Blocks.
+     * @param request Provides details on who made the request and which Athena catalog they are querying.
+     * @return A ListSchemasResponse which primarily contains a Set&lt;String&gt; of schema names and a catalog name
+     * corresponding the Athena catalog that was queried.
+     */
+    @Override
+    public ListSchemasResponse doListSchemaNames(BlockAllocator allocator, ListSchemasRequest request)
+    {
+<span class="nc" id="L108">        logger.info(&quot;doListSchemaNames: enter - &quot; + request);</span>
+
+<span class="nc" id="L110">        Set&lt;String&gt; schemas = new HashSet&lt;&gt;();</span>
+
+        /**
+         * TODO: Add schemas, example below
+         *
+         schemas.add(&quot;schema1&quot;);
+         *
+         */
+
+<span class="nc" id="L119">        return new ListSchemasResponse(request.getCatalogName(), schemas);</span>
+    }
+
+    /**
+     * Used to get a paginated list of tables that this source contains.
+     *
+     * @param allocator Tool for creating and managing Apache Arrow Blocks.
+     * @param request Provides details on who made the request and which Athena catalog and database they are querying.
+     * @return A ListTablesResponse which primarily contains a List&lt;TableName&gt; enumerating the tables in this
+     * catalog, database tuple. It also contains the catalog name corresponding the Athena catalog that was queried.
+     * @implNote A complete (un-paginated) list of tables should be returned if the request's pageSize is set to
+     * ListTablesRequest.UNLIMITED_PAGE_SIZE_VALUE.
+     */
+    @Override
+    public ListTablesResponse doListTables(BlockAllocator allocator, ListTablesRequest request)
+    {
+<span class="nc" id="L135">        logger.info(&quot;doListTables: enter - &quot; + request);</span>
+
+<span class="nc" id="L137">        List&lt;TableName&gt; tables = new ArrayList&lt;&gt;();</span>
+
+        /**
+         * TODO: Add tables for the requested schema, example below
+         *
+         tables.add(new TableName(request.getSchemaName(), &quot;table1&quot;));
+         tables.add(new TableName(request.getSchemaName(), &quot;table2&quot;));
+         tables.add(new TableName(request.getSchemaName(), &quot;table3&quot;));
+         *
+         */
+
+<span class="nc" id="L148">        String nextToken = null;</span>
+<span class="nc" id="L149">        int pageSize = request.getPageSize();</span>
+
+        /**
+         * TODO: Add logic to paginate the response when the request's pageSize is not UNLIMITED_PAGE_SIZE_VALUE.
+         *
+         if (pageSize != UNLIMITED_PAGE_SIZE_VALUE) {
+            // Get the stating table for this page (if null, then this is the first page).
+            String startToken = request.getNextToken();
+            // Sort the list. Include all tables if the startToken is null, or only the tables whose names are equal to
+            // or higher in value than startToken. Limit the number of tables in the list to the pageSize + 1 (the
+            // nextToken).
+            List&lt;TableName&gt; paginatedTables = tables.stream()
+                    .sorted(Comparator.comparing(TableName::getTableName))
+                    .filter(table -&gt; startToken == null || table.getTableName().compareTo(startToken) &gt;= 0)
+                    .limit(pageSize + 1)
+                    .collect(Collectors.toList());
+
+            if (paginatedTables.size() &gt; pageSize) {
+                // Paginated list contains full page of results + nextToken.
+                // nextToken is the last element in the paginated list.
+                // In an actual connector, the nextToken's value should be obfuscated.
+                nextToken = paginatedTables.get(pageSize).getTableName();
+                // nextToken is removed to include only the paginated results.
+                tables = paginatedTables.subList(0, pageSize);
+            }
+            else {
+                // Paginated list contains all remaining tables - end of the pagination.
+                tables = paginatedTables;
+            }
+         }
+         *
+         */
+
+<span class="nc" id="L182">        return new ListTablesResponse(request.getCatalogName(), tables, nextToken);</span>
+    }
+
+    /**
+     * Used to get definition (field names, types, descriptions, etc...) of a Table.
+     *
+     * @param allocator Tool for creating and managing Apache Arrow Blocks.
+     * @param request Provides details on who made the request and which Athena catalog, database, and table they are querying.
+     * @return A GetTableResponse which primarily contains:
+     * 1. An Apache Arrow Schema object describing the table's columns, types, and descriptions.
+     * 2. A Set&lt;String&gt; of partition column names (or empty if the table isn't partitioned).
+     * 3. A TableName object confirming the schema and table name the response is for.
+     * 4. A catalog name corresponding the Athena catalog that was queried.
+     */
+    @Override
+    public GetTableResponse doGetTable(BlockAllocator allocator, GetTableRequest request)
+    {
+<span class="nc" id="L199">        logger.info(&quot;doGetTable: enter - &quot; + request);</span>
+
+<span class="nc" id="L201">        Set&lt;String&gt; partitionColNames = new HashSet&lt;&gt;();</span>
+
+        /**
+         * TODO: Add partitions columns, example below.
+         *
+         partitionColNames.add(&quot;year&quot;);
+         partitionColNames.add(&quot;month&quot;);
+         partitionColNames.add(&quot;day&quot;);
+         *
+         */
+
+<span class="nc" id="L212">        SchemaBuilder tableSchemaBuilder = SchemaBuilder.newBuilder();</span>
+
+        /**
+         * TODO: Generate a schema for the requested table.
+         *
+         tableSchemaBuilder.addIntField(&quot;year&quot;)
+         .addIntField(&quot;month&quot;)
+         .addIntField(&quot;day&quot;)
+         .addStringField(&quot;account_id&quot;)
+         .addStringField(&quot;encrypted_payload&quot;)
+         .addStructField(&quot;transaction&quot;)
+         .addChildField(&quot;transaction&quot;, &quot;id&quot;, Types.MinorType.INT.getType())
+         .addChildField(&quot;transaction&quot;, &quot;completed&quot;, Types.MinorType.BIT.getType())
+         //Metadata who's name matches a column name
+         //is interpreted as the description of that
+         //column when you run &quot;show tables&quot; queries.
+         .addMetadata(&quot;year&quot;, &quot;The year that the payment took place in.&quot;)
+         .addMetadata(&quot;month&quot;, &quot;The month that the payment took place in.&quot;)
+         .addMetadata(&quot;day&quot;, &quot;The day that the payment took place in.&quot;)
+         .addMetadata(&quot;account_id&quot;, &quot;The account_id used for this payment.&quot;)
+         .addMetadata(&quot;encrypted_payload&quot;, &quot;A special encrypted payload.&quot;)
+         .addMetadata(&quot;transaction&quot;, &quot;The payment transaction details.&quot;)
+         //This metadata field is for our own use, Athena will ignore and pass along fields it doesn't expect.
+         //we will use this later when we implement doGetTableLayout(...)
+         .addMetadata(&quot;partitionCols&quot;, &quot;year,month,day&quot;);
+         *
+         */
+
+<span class="nc" id="L240">        return new GetTableResponse(request.getCatalogName(),</span>
+<span class="nc" id="L241">                request.getTableName(),</span>
+<span class="nc" id="L242">                tableSchemaBuilder.build(),</span>
+                partitionColNames);
+    }
+
+    /**
+     * Used to get the partitions that must be read from the request table in order to satisfy the requested predicate.
+     *
+     * @param blockWriter Used to write rows (partitions) into the Apache Arrow response.
+     * @param request Provides details of the catalog, database, and table being queried as well as any filter predicate.
+     * @param queryStatusChecker A QueryStatusChecker that you can use to stop doing work for a query that has already terminated
+     * @note Partitions are partially opaque to Amazon Athena in that it only understands your partition columns and
+     * how to filter out partitions that do not meet the query's constraints. Any additional columns you add to the
+     * partition data are ignored by Athena but passed on to calls on GetSplits.
+     */
+    @Override
+    public void getPartitions(BlockWriter blockWriter, GetTableLayoutRequest request, QueryStatusChecker queryStatusChecker)
+            throws Exception
+    {
+<span class="nc bnc" id="L260" title="All 2 branches missed.">        for (int year = 2000; year &lt; 2018; year++) {</span>
+<span class="nc bnc" id="L261" title="All 2 branches missed.">            for (int month = 1; month &lt; 12; month++) {</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">                for (int day = 1; day &lt; 31; day++) {</span>
+
+<span class="nc" id="L264">                    final int yearVal = year;</span>
+<span class="nc" id="L265">                    final int monthVal = month;</span>
+<span class="nc" id="L266">                    final int dayVal = day;</span>
+                    /**
+                     * TODO: If the partition represented by this year,month,day offer the values to the block
+                     * and check if they all passed constraints. The Block has been configured to automatically
+                     * apply our partition pruning constraints.
+                     *
+                     blockWriter.writeRows((Block block, int row) -&gt; {
+                     boolean matched = true;
+                     matched &amp;= block.setValue(&quot;year&quot;, row, yearVal);
+                     matched &amp;= block.setValue(&quot;month&quot;, row, monthVal);
+                     matched &amp;= block.setValue(&quot;day&quot;, row, dayVal);
+                     //If all fields matches then we wrote 1 row during this call so we return 1
+                     return matched ? 1 : 0;
+                     });
+                     *
+                     */
+                }
+            }
+        }
+<span class="nc" id="L285">    }</span>
+
+    /**
+     * Used to split-up the reads required to scan the requested batch of partition(s).
+     *
+     * @param allocator Tool for creating and managing Apache Arrow Blocks.
+     * @param request Provides details of the catalog, database, table, andpartition(s) being queried as well as
+     * any filter predicate.
+     * @return A GetSplitsResponse which primarily contains:
+     * 1. A Set&lt;Split&gt; which represent read operations Amazon Athena must perform by calling your read function.
+     * 2. (Optional) A continuation token which allows you to paginate the generation of splits for large queries.
+     * @note A Split is a mostly opaque object to Amazon Athena. Amazon Athena will use the optional SpillLocation and
+     * optional EncryptionKey for pipelined reads but all properties you set on the Split are passed to your read
+     * function to help you perform the read.
+     */
+    @Override
+    public GetSplitsResponse doGetSplits(BlockAllocator allocator, GetSplitsRequest request)
+    {
+<span class="nc" id="L303">        logger.info(&quot;doGetSplits: enter - &quot; + request);</span>
+
+<span class="nc" id="L305">        String catalogName = request.getCatalogName();</span>
+<span class="nc" id="L306">        Set&lt;Split&gt; splits = new HashSet&lt;&gt;();</span>
+
+<span class="nc" id="L308">        Block partitions = request.getPartitions();</span>
+
+<span class="nc" id="L310">        FieldReader day = partitions.getFieldReader(&quot;day&quot;);</span>
+<span class="nc" id="L311">        FieldReader month = partitions.getFieldReader(&quot;month&quot;);</span>
+<span class="nc" id="L312">        FieldReader year = partitions.getFieldReader(&quot;year&quot;);</span>
+<span class="nc bnc" id="L313" title="All 2 branches missed.">        for (int i = 0; i &lt; partitions.getRowCount(); i++) {</span>
+            //Set the readers to the partition row we area on
+<span class="nc" id="L315">            year.setPosition(i);</span>
+<span class="nc" id="L316">            month.setPosition(i);</span>
+<span class="nc" id="L317">            day.setPosition(i);</span>
+
+            /**
+             * TODO: For each partition in the request, create 1 or more splits. Splits
+             *   are parallelizable units of work. Each represents a part of your table
+             *   that needs to be read for the query. Splits are opaque to Athena aside from the
+             *   spill location and encryption key. All properties added to a split are solely
+             *   for your use when Athena calls your readWithContraints(...) function to perform
+             *   the read. In this example we just need to know the partition details (year, month, day).
+             *
+             Split split = Split.newBuilder(makeSpillLocation(request), makeEncryptionKey())
+             .add(&quot;year&quot;, String.valueOf(year.readInteger()))
+             .add(&quot;month&quot;, String.valueOf(month.readInteger()))
+             .add(&quot;day&quot;, String.valueOf(day.readInteger()))
+             .build();
+
+             splits.add(split);
+             *
+             */
+        }
+
+<span class="nc" id="L338">        logger.info(&quot;doGetSplits: exit - &quot; + splits.size());</span>
+<span class="nc" id="L339">        return new GetSplitsResponse(catalogName, splits);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>

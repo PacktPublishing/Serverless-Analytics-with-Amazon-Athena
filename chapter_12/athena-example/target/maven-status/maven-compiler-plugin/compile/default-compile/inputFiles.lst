@@ -1,0 +1,4 @@
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-example/src/main/java/com/amazonaws/connectors/athena/example/ExampleMetadataHandler.java
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-example/src/main/java/com/amazonaws/connectors/athena/example/ExampleCompositeHandler.java
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-example/src/main/java/com/amazonaws/connectors/athena/example/ExampleRecordHandler.java
+/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-example/src/main/java/com/amazonaws/connectors/athena/example/ExampleUserDefinedFuncHandler.java

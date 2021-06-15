@@ -1,0 +1,4 @@
+com/amazonaws/connectors/athena/example/ExampleRecordHandlerTest$1.class
+com/amazonaws/connectors/athena/example/ExampleRecordHandlerTest.class
+com/amazonaws/connectors/athena/example/ExampleMetadataHandlerTest.class
+com/amazonaws/connectors/athena/example/ExampleUserDefinedFuncHandlerTest.class

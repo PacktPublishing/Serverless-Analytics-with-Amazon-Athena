@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExampleUserDefinedFuncHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">athena-example</a> &gt; <a href="index.source.html" class="el_package">com.amazonaws.connectors.athena.example</a> &gt; <span class="el_source">ExampleUserDefinedFuncHandler.java</span></div><h1>ExampleUserDefinedFuncHandler.java</h1><pre class="source lang-java linenums">/*-
+ * #%L
+ * athena-example
+ * %%
+ * Copyright (C) 2019 Amazon Web Services
+ * %%
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * #L%
+ */
+package com.amazonaws.connectors.athena.example;
+
+import com.amazonaws.athena.connector.lambda.handlers.UserDefinedFunctionHandler;
+import org.apache.arrow.util.VisibleForTesting;
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
+
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
+
+public class ExampleUserDefinedFuncHandler
+        extends UserDefinedFunctionHandler
+{
+<span class="fc" id="L41">    private static final Logger logger = LoggerFactory.getLogger(ExampleUserDefinedFuncHandler.class);</span>
+
+    private static final String SOURCE_TYPE = &quot;custom&quot;;
+
+    public ExampleUserDefinedFuncHandler()
+    {
+<span class="fc" id="L47">        super(SOURCE_TYPE);</span>
+<span class="fc" id="L48">    }</span>
+
+    /**
+     * This UDF extracts an 'Account' from the input STRUCT (provided as a Map). In this case 'Account' is
+     * an application specific concept and very custom to our test dataset's schema.
+     *
+     * @param transaction The transaction from which to extract the id field.
+     * @return An Integer containing the Transaction ID or -1 if the id couldn't be extracted.
+     *
+     * @note The UserDefinedFunctionHandler class that this class extends handles mapping the UDFs we use in our
+     * SQL queries into calls to this function.
+     */
+    public Integer extract_tx_id(Map&lt;String, Object&gt; transaction)
+    {
+        /**
+         * TODO: Uncomment the below code that extracts the account id field from the input.
+         *
+         if (transaction == null || !transaction.containsKey(&quot;id&quot;)) {
+         //unknown account
+         return -1;
+         }
+
+         try {
+         return (Integer) transaction.get(&quot;id&quot;);
+         }
+         catch (RuntimeException ex) {
+         //We are choosing to return the default (-1) on failure but you may want to throw (which will fail your query)
+         logger.warn(&quot;extractAccount: failed to extract account.&quot;, ex);
+         }
+
+         *
+         */
+<span class="nc" id="L80">        return -1;</span>
+    }
+
+    /**
+     * Decrypts the provided value using our application's secret key and encryption Algo.
+     *
+     * @param payload The cipher text to decrypt.
+     * @return ClearText version if the input payload, null if the decrypt failed.
+     *
+     * @note The UserDefinedFunctionHandler class that this class extends handles mapping the UDFs we use in our
+     * SQL queries into calls to this function.
+     */
+    public String decrypt(String payload)
+    {
+<span class="nc" id="L94">        String encryptionKey = null;</span>
+<span class="nc" id="L95">        String result = null;</span>
+
+        /**
+         *TODO: Uncomment the below code which retrieves our encryption key and then decrypts the
+         * secret data in our payload.
+         *
+        try {
+            encryptionKey = getEncryptionKey();
+            result = symmetricDecrypt(payload, encryptionKey);
+        }
+        catch (Exception ex) {
+            logger.warn(&quot;decrypt: failed to decrypt {}.&quot;, payload, ex);
+            //We are choosing to return null on failure but you may want to throw (which will fail your query)
+            return null;
+        }
+         *
+         */
+
+<span class="nc" id="L113">        return result;</span>
+    }
+
+    /**
+     * This is an extremely POOR usage of AES-GCM and is only mean to illustrate how one could
+     * use a UDF for masking a field using encryption. In production scenarios we would recommend
+     * using AWS KMS for Key Management and a strong cipher like AES-GCM.
+     *
+     * @param text The text to decrypt.
+     * @param secretKey The password/key to use to decrypt the text.
+     * @return The decrypted text.
+     */
+    @VisibleForTesting
+    protected String symmetricDecrypt(String text, String secretKey)
+            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, BadPaddingException,
+            IllegalBlockSizeException
+    {
+        Cipher cipher;
+        String encryptedString;
+        byte[] encryptText;
+        byte[] raw;
+        SecretKeySpec skeySpec;
+<span class="fc" id="L135">        raw = Base64.decodeBase64(secretKey);</span>
+<span class="fc" id="L136">        skeySpec = new SecretKeySpec(raw, &quot;AES&quot;);</span>
+<span class="fc" id="L137">        encryptText = Base64.decodeBase64(text);</span>
+<span class="fc" id="L138">        cipher = Cipher.getInstance(&quot;AES&quot;);</span>
+<span class="fc" id="L139">        cipher.init(Cipher.DECRYPT_MODE, skeySpec);</span>
+<span class="fc" id="L140">        encryptedString = new String(cipher.doFinal(encryptText));</span>
+<span class="fc" id="L141">        return encryptedString;</span>
+    }
+
+    /**
+     * DO _NOT_ manage keys like this in real world usage. We are hard coding a key here to work
+     * with the tutorial's generated data set. In production scenarios we would recommend
+     * using AWS KMS for Key Management and a strong cipher like AES-GCM.
+     *
+     * @return A String representation of the AES encryption key to use to decrypt data.
+     */
+    @VisibleForTesting
+    protected String getEncryptionKey()
+    {
+        //must be exactly 24 chars or the KeySpec will fail. In general this is a poor, but simple, way to store the key.
+<span class="fc" id="L155">        return &quot;AMzDLG4D039Km2IxIzQwfg==&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.4.201905082037</span></div></body></html>
