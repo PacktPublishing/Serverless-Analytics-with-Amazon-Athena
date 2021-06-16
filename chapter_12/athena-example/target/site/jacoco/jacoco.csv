@@ -1,5 +1,0 @@
-GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-athena-example,com.amazonaws.connectors.athena.example,ExampleUserDefinedFuncHandler,9,38,0,0,4,11,2,4,2,4
-athena-example,com.amazonaws.connectors.athena.example,ExampleRecordHandler,150,14,8,0,26,4,8,2,4,2
-athena-example,com.amazonaws.connectors.athena.example,ExampleMetadataHandler,173,13,8,0,36,3,10,2,6,2
-athena-example,com.amazonaws.connectors.athena.example,ExampleCompositeHandler,12,0,0,0,2,0,1,0,1,0

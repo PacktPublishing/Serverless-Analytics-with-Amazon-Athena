@@ -1,6 +1,0 @@
-/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/ConnectorValidator.java
-/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/FederationService.java
-/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/LambdaMetadataProvider.java
-/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/ConstraintParser.java
-/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/FederationServiceProvider.java
-/mnt/c/Users/antho/Documents/workspaces/Serverless-Analytics-with-Amazon-Athena/chapter_12/athena-federation-sdk-tools/src/main/java/com/amazonaws/athena/connector/validation/LambdaRecordProvider.java
