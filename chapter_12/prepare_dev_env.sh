@@ -61,6 +61,9 @@ sudo rm -rf /tmp/aws-sam-cli-linux-x86_64.zip
 
 aws --version
 sam --version
+mvn --version
+java --version
+javac --version
 
 echo ""
 echo ""
