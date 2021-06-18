@@ -145,41 +145,7 @@ public class ExampleMetadataHandler
          *
          */
 
-        String nextToken = null;
-        int pageSize = request.getPageSize();
-
-        /**
-         * TODO: Add logic to paginate the response when the request's pageSize is not UNLIMITED_PAGE_SIZE_VALUE.
-         *
-         if (pageSize != UNLIMITED_PAGE_SIZE_VALUE) {
-            // Get the stating table for this page (if null, then this is the first page).
-            String startToken = request.getNextToken();
-            // Sort the list. Include all tables if the startToken is null, or only the tables whose names are equal to
-            // or higher in value than startToken. Limit the number of tables in the list to the pageSize + 1 (the
-            // nextToken).
-            List<TableName> paginatedTables = tables.stream()
-                    .sorted(Comparator.comparing(TableName::getTableName))
-                    .filter(table -> startToken == null || table.getTableName().compareTo(startToken) >= 0)
-                    .limit(pageSize + 1)
-                    .collect(Collectors.toList());
-
-            if (paginatedTables.size() > pageSize) {
-                // Paginated list contains full page of results + nextToken.
-                // nextToken is the last element in the paginated list.
-                // In an actual connector, the nextToken's value should be obfuscated.
-                nextToken = paginatedTables.get(pageSize).getTableName();
-                // nextToken is removed to include only the paginated results.
-                tables = paginatedTables.subList(0, pageSize);
-            }
-            else {
-                // Paginated list contains all remaining tables - end of the pagination.
-                tables = paginatedTables;
-            }
-         }
-         *
-         */
-
-        return new ListTablesResponse(request.getCatalogName(), tables, nextToken);
+        return new ListTablesResponse(request.getCatalogName(), tables, null);
     }
 
     /**
@@ -222,18 +188,6 @@ public class ExampleMetadataHandler
          .addStructField("transaction")
          .addChildField("transaction", "id", Types.MinorType.INT.getType())
          .addChildField("transaction", "completed", Types.MinorType.BIT.getType())
-         //Metadata who's name matches a column name
-         //is interpreted as the description of that
-         //column when you run "show tables" queries.
-         .addMetadata("year", "The year that the payment took place in.")
-         .addMetadata("month", "The month that the payment took place in.")
-         .addMetadata("day", "The day that the payment took place in.")
-         .addMetadata("account_id", "The account_id used for this payment.")
-         .addMetadata("encrypted_payload", "A special encrypted payload.")
-         .addMetadata("transaction", "The payment transaction details.")
-         //This metadata field is for our own use, Athena will ignore and pass along fields it doesn't expect.
-         //we will use this later when we implement doGetTableLayout(...)
-         .addMetadata("partitionCols", "year,month,day");
          *
          */
 
