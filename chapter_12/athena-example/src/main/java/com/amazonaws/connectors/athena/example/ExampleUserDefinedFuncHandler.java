@@ -48,39 +48,6 @@ public class ExampleUserDefinedFuncHandler
     }
 
     /**
-     * This UDF extracts an 'Account' from the input STRUCT (provided as a Map). In this case 'Account' is
-     * an application specific concept and very custom to our test dataset's schema.
-     *
-     * @param transaction The transaction from which to extract the id field.
-     * @return An Integer containing the Transaction ID or -1 if the id couldn't be extracted.
-     *
-     * @note The UserDefinedFunctionHandler class that this class extends handles mapping the UDFs we use in our
-     * SQL queries into calls to this function.
-     */
-    public Integer extract_tx_id(Map<String, Object> transaction)
-    {
-        /**
-         * TODO: Uncomment the below code that extracts the account id field from the input.
-         *
-         if (transaction == null || !transaction.containsKey("id")) {
-         //unknown account
-         return -1;
-         }
-
-         try {
-         return (Integer) transaction.get("id");
-         }
-         catch (RuntimeException ex) {
-         //We are choosing to return the default (-1) on failure but you may want to throw (which will fail your query)
-         logger.warn("extractAccount: failed to extract account.", ex);
-         }
-
-         *
-         */
-        return -1;
-    }
-
-    /**
      * Decrypts the provided value using our application's secret key and encryption Algo.
      *
      * @param payload The cipher text to decrypt.
@@ -94,10 +61,6 @@ public class ExampleUserDefinedFuncHandler
         String encryptionKey = null;
         String result = null;
 
-        /**
-         *TODO: Uncomment the below code which retrieves our encryption key and then decrypts the
-         * secret data in our payload.
-         *
         try {
             encryptionKey = getEncryptionKey();
             result = symmetricDecrypt(payload, encryptionKey);
@@ -107,8 +70,6 @@ public class ExampleUserDefinedFuncHandler
             //We are choosing to return null on failure but you may want to throw (which will fail your query)
             return null;
         }
-         *
-         */
 
         return result;
     }
