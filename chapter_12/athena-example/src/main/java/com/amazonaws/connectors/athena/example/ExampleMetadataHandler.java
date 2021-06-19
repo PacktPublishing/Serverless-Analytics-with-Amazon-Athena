@@ -187,7 +187,7 @@ public class ExampleMetadataHandler
          .addStringField("encrypted_payload")
          .addStructField("transaction")
          .addChildField("transaction", "id", Types.MinorType.INT.getType())
-         .addChildField("transaction", "completed", Types.MinorType.BIT.getType())
+         .addChildField("transaction", "completed", Types.MinorType.BIT.getType());
          *
          */
 
