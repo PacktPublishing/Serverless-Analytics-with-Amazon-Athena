@@ -21,7 +21,11 @@ cat << EOF
 #   3. AWS CLI (latest version)
 #   4. AWS SAM Build Tool (latest version)
 #
-# This script has been designed and tested to work on Amazon Linux but may require slight adjustment for other Operating Systems.
+# If you already have a subset of these installed or do not want this script to make changes to
+# your development environment, we suggest editing the script or manually running its commands
+# to customize your environment.
+#
+# This script has been designed and tested to work on Ubuntu but may require slight adjustment for other Operating Systems.
 # All tools used here (except HomeBrew) are supported on all major Operating Systems: Windows, Linux, Mac OS.
 #
 # This script may prompt you for yes/no responses or permission to continue at verious points. It is not meant to run unattended.
@@ -46,7 +50,7 @@ echo "export M2_HOME=/opt/apache-maven-3.5.4" >> ~/.bash_profile
 echo "export PATH=\${M2_HOME}/bin:\${PATH}" >> ~/.bash_profile
 sudo rm /tmp/apache-maven-3.5.4-bin.tar.gz
 
-sudo apt-get install default-jdk -y || true
+sudo apt-get install openjdk-8-jdk -y || true
 
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "/tmp/awscli-bundle.zip"
 unzip /tmp/awscli-bundle.zip -d /tmp/
@@ -59,11 +63,17 @@ sudo /tmp/sam-installation/install || true
 sudo rm -rf /tmp/sam-installation
 sudo rm -rf /tmp/aws-sam-cli-linux-x86_64.zip
 
+echo "Select a valid Java Runtime."
+sudo update-alternatives --config java
+
+echo "Select a valid JDK."
+sudo update-alternatives --config javac
+
 aws --version
 sam --version
 mvn --version
-java --version
-javac --version
+java -version
+javac -version
 
 echo ""
 echo ""
