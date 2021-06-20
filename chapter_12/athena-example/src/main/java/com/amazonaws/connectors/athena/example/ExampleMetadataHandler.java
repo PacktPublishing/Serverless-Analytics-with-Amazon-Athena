@@ -36,7 +36,9 @@ import com.amazonaws.athena.connector.lambda.metadata.ListSchemasRequest;
 import com.amazonaws.athena.connector.lambda.metadata.ListSchemasResponse;
 import com.amazonaws.athena.connector.lambda.metadata.ListTablesRequest;
 import com.amazonaws.athena.connector.lambda.metadata.ListTablesResponse;
+import com.amazonaws.athena.connector.lambda.security.EncryptionKey;
 import com.amazonaws.athena.connector.lambda.security.EncryptionKeyFactory;
+
 import com.amazonaws.services.athena.AmazonAthena;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import org.apache.arrow.util.VisibleForTesting;
@@ -53,6 +55,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.crypto.KeyGenerator;
+import java.util.Random;
+import javax.crypto.SecretKey;
+
+import java.security.NoSuchAlgorithmException;
 
 import static com.amazonaws.athena.connector.lambda.metadata.ListTablesRequest.UNLIMITED_PAGE_SIZE_VALUE;
 
@@ -291,5 +298,29 @@ public class ExampleMetadataHandler
 
         logger.info("doGetSplits: exit - " + splits.size());
         return new GetSplitsResponse(catalogName, splits);
+    }
+
+
+    /**
+     * WARNING: DO NOT USE THIS IN PROD! We are overloading the super method because it can
+     *          at time block indefinitely when running on Windows Subsystem for Linux
+     *          due to insufficient entropy. The super's implementaiton is more secure.
+     *          For this teaching exercise we want to support the widest range of development
+     *          environments. For max security authors should opt for the KMSEncryptionKeyFactory
+     *          over the LocalEncryptionKeyFactory anyway.
+     */
+    protected EncryptionKey makeEncryptionKey()
+    {
+        try {
+            Random random = new Random();
+            KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+            SecretKey key = keyGen.generateKey();
+            final byte[] nonce = new byte[12];
+            random.nextBytes(nonce);
+            return new EncryptionKey(key.getEncoded(), nonce);
+        }
+        catch (NoSuchAlgorithmException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }
