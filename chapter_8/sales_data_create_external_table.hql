@@ -1,7 +1,7 @@
 CREATE EXTERNAL TABLE sales (
     timestamp STRING,
     item_id STRING,
-    customr_id INT,
+    customer_id INT,
     price DOUBLE,
     shipping_price DOUBLE,
     discount_code STRING
