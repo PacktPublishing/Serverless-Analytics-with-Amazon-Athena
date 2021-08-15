@@ -1,0 +1,36 @@
+Query Plan
+Fragment 0 [SINGLE]
+    Output layout: [table_data]
+    Output partitioning: SINGLE []
+    Stage Execution Strategy: UNGROUPED_EXECUTION
+    - Output[table_data] => [[table_data]]
+        - RemoteSource[1] => [[table_data]]
+
+Fragment 1 [HASH]
+    Output layout: [table_data]
+    Output partitioning: SINGLE []
+    Stage Execution Strategy: UNGROUPED_EXECUTION
+    - LeftJoin[("table_key" = "table_key_0")][$hashvalue, $hashvalue_9] => [[table_data]]
+            Distribution: PARTITIONED
+        - RemoteSource[2] => [[table_key, table_data, $hashvalue]]
+        - LocalExchange[HASH][$hashvalue_9] ("table_key_0") => [[table_key_0, $hashvalue_9]]
+            - RemoteSource[3] => [[table_key_0, $hashvalue_10]]
+
+Fragment 2 [SOURCE]
+    Output layout: [table_key, table_data, $hashvalue_8]
+    Output partitioning: HASH [table_key][$hashvalue_8]
+    Stage Execution Strategy: UNGROUPED_EXECUTION
+    - ScanProject[table = awsdatacatalog:HiveTableHandle{schemaName=packt_serverless_analystics_chapter_11, tableName=larger_table, analyzePartitionValues=Optional.empty}, grouped = false] => [[table_key, table_data, $hashvalue_8]]
+            $hashvalue_8 := "combine_hash"(bigint '0', COALESCE("$operator$hash_code"("table_key"), 0))
+            LAYOUT: packt_serverless_analystics_chapter_11.larger_table
+            table_key := table_key:bigint:0:REGULAR
+            table_data := table_data:string:1:REGULAR
+
+Fragment 3 [SOURCE]
+    Output layout: [table_key_0, $hashvalue_11]
+    Output partitioning: HASH [table_key_0][$hashvalue_11]
+    Stage Execution Strategy: UNGROUPED_EXECUTION
+    - ScanProject[table = awsdatacatalog:HiveTableHandle{schemaName=packt_serverless_analystics_chapter_11, tableName=smaller_table, analyzePartitionValues=Optional.empty}, grouped = false] => [[table_key_0, $hashvalue_11]]
+            $hashvalue_11 := "combine_hash"(bigint '0', COALESCE("$operator$hash_code"("table_key_0"), 0))
+            LAYOUT: packt_serverless_analystics_chapter_11.smaller_table
+            table_key_0 := table_key:bigint:0:REGULAR

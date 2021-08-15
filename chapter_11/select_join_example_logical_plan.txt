@@ -1,0 +1,17 @@
+Query Plan
+- Output[table_data] => [[table_data]]
+    - RemoteExchange[GATHER] => [[table_data]]
+        - LeftJoin[("table_key" = "table_key_0")][$hashvalue, $hashvalue_9] => [[table_data]]
+                Distribution: PARTITIONED
+            - RemoteExchange[REPARTITION][$hashvalue] => [[table_key, table_data, $hashvalue]]
+                - ScanProject[table = awsdatacatalog:HiveTableHandle{schemaName=packt_serverless_analystics_chapter_11, tableName=larger_table, analyzePartitionValues=Optional.empty}] => [[table_key, table_data, $hashvalue_8]]
+                        $hashvalue_8 := "combine_hash"(bigint '0', COALESCE("$operator$hash_code"("table_key"), 0))
+                        LAYOUT: packt_serverless_analystics_chapter_11.larger_table
+                        table_key := table_key:bigint:0:REGULAR
+                        table_data := table_data:string:1:REGULAR
+            - LocalExchange[HASH][$hashvalue_9] ("table_key_0") => [[table_key_0, $hashvalue_9]]
+                - RemoteExchange[REPARTITION][$hashvalue_10] => [[table_key_0, $hashvalue_10]]
+                    - ScanProject[table = awsdatacatalog:HiveTableHandle{schemaName=packt_serverless_analystics_chapter_11, tableName=smaller_table, analyzePartitionValues=Optional.empty}] => [[table_key_0, $hashvalue_11]]
+                            $hashvalue_11 := "combine_hash"(bigint '0', COALESCE("$operator$hash_code"("table_key_0"), 0))
+                            LAYOUT: packt_serverless_analystics_chapter_11.smaller_table
+                            table_key_0 := table_key:bigint:0:REGULAR
