@@ -1,0 +1,13 @@
+Query Plan
+{
+  "inputTableColumnInfos" : [ {
+    "table" : {
+      "catalog" : "awsdatacatalog",
+      "schemaTable" : {
+        "schema" : "packt_serverless_analystics_chapter_11",
+        "table" : "website_clicks"
+      }
+    },
+    "columnConstraints" : [ ]
+  } ]
+}

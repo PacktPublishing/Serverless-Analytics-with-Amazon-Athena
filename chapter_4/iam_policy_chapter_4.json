@@ -18,7 +18,7 @@
         "iam:PutRolePolicy"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:iam:*:*:*"
+      "Resource": "arn:aws:iam:*:*"
     },
     {
         "Sid": "CloudwatchLogsPermissions",

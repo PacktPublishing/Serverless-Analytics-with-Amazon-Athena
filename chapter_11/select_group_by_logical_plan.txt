@@ -1,0 +1,16 @@
+Query Plan
+- Output[SOURCE_ADDR, _col1] => [[source_addr, count]]
+        SOURCE_ADDR := source_addr
+        _col1 := count
+    - RemoteExchange[GATHER] => [[source_addr, count]]
+        - Project[] => [[source_addr, count]]
+            - Aggregate(FINAL)[source_addr][$hashvalue] => [[source_addr, $hashvalue, count]]
+                    count := "count"("count_8")
+                - LocalExchange[HASH][$hashvalue] ("source_addr") => [[source_addr, count_8, $hashvalue]]
+                    - RemoteExchange[REPARTITION][$hashvalue_9] => [[source_addr, count_8, $hashvalue_9]]
+                        - Aggregate(PARTIAL)[source_addr][$hashvalue_10] => [[source_addr, $hashvalue_10, count_8]]
+                                count_8 := "count"(*)
+                            - ScanProject[table = awsdatacatalog:HiveTableHandle{schemaName=packt_serverless_analystics_chapter_11, tableName=website_clicks, analyzePartitionValues=Optional.empty}] => [[source_addr, $hashvalue_10]]
+                                    $hashvalue_10 := "combine_hash"(bigint '0', COALESCE("$operator$hash_code"("source_addr"), 0))
+                                    LAYOUT: packt_serverless_analystics_chapter_11.website_clicks
+                                    source_addr := source_addr:string:1:REGULAR
