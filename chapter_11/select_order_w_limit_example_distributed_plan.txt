@@ -1,0 +1,21 @@
+Query Plan
+Fragment 0 [SINGLE]
+    Output layout: [total_amount]
+    Output partitioning: SINGLE []
+    Stage Execution Strategy: UNGROUPED_EXECUTION
+    - Output[total_amount] => [[total_amount]]
+        - Project[] => [[total_amount]]
+            - TopN[100 by (trip_distance DESC_NULLS_LAST)] => [[trip_distance, total_amount]]
+                - LocalExchange[SINGLE] () => [[trip_distance, total_amount]]
+                    - RemoteSource[1] => [[trip_distance, total_amount]]
+
+Fragment 1 [SOURCE]
+    Output layout: [trip_distance, total_amount]
+    Output partitioning: SINGLE []
+    Stage Execution Strategy: UNGROUPED_EXECUTION
+    - TopNPartial[100 by (trip_distance DESC_NULLS_LAST)] => [[trip_distance, total_amount]]
+        - ScanFilterProject[table = awsdatacatalog:HiveTableHandle{schemaName=packt_serverless_analystics_chapter_11, tableName=nyc_taxi, analyzePartitionValues=Optional.empty}, grouped = false, filterPredicate = ("payment_type" = BIGINT '1')] => [[trip_distance, total_amount]]
+                LAYOUT: packt_serverless_analystics_chapter_11.nyc_taxi
+                payment_type := payment_type:bigint:9:REGULAR
+                total_amount := total_amount:double:16:REGULAR
+                trip_distance := trip_distance:double:4:REGULAR
