@@ -19,9 +19,8 @@ CREATE EXTERNAL TABLE nyc_taxi(
   congestion_surcharge double)
 PARTITIONED BY (
   trip_date string
-) BUCKETED BY (
-  tripid string
 )
+CLUSTERED BY (ratecodeid) INTO 3 BUCKETS
 ROW FORMAT DELIMITED 
   FIELDS TERMINATED BY ',' 
 STORED AS INPUTFORMAT 
@@ -29,7 +28,4 @@ STORED AS INPUTFORMAT
 OUTPUTFORMAT 
   'org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat'
 LOCATION
-  's3://<BUCKET>/tables/nyc_taxi';
-
-
-
+  's3://mybucket/tables/nyc_taxi';
