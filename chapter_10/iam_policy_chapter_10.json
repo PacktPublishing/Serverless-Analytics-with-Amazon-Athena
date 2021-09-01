@@ -148,7 +148,6 @@
                 "athena:GetExecutionEngines",
                 "athena:GetTables",
                 "athena:GetTable",
-
                 "cloudtrail:GetTrail",
                 "events:DescribeRule",
                 "events:EnableRule",
