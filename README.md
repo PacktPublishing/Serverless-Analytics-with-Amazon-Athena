@@ -66,3 +66,7 @@ We also provide a PDF file that has color images of the screenshots/diagrams use
 **Mert Turkay Hocanin** is a Principal Big Data Architect at Amazon Web Services within the AWS Glue and AWS Lake Formation services and has previously worked for several other services including Amazon Athena, Amazon EMR, Amazon Managed Blockchain. During his time at AWS, he worked with several Fortune 500 companies on some of the largest data lakes in the world and was involved with the launching of three Amazon Web Services. Prior to being a Big Data Architect, he was a Senior Software Developer within Amazon's retail systems organization building one of the earliest data lakes in the company in 2013. When he is not helping customers build data lakes, he enjoys spending time with his wife-Subrina, son-Tristan, and exploring New York City.
 
 **Aaron Wishnick** works as a Senior Software Engineer at Amazon, where he has been for 7 years. During that time he has worked on Amazon's payment systems, financial intelligence systems, as well as working for AWS on Athena and AWS Proton. When not at work, Aaron and his fiance, Alyssa, are on a quest to determine just how much dog fur is too much, with their husky and malamute, Mina and Wally.
+### Download a free PDF
+
+ <i>If you have already purchased a print or Kindle version of this book, you can get a DRM-free PDF version at no cost.<br>Simply click on the link to claim your free PDF.</i>
+<p align="center"> <a href="https://packt.link/free-ebook/9781800562349">https://packt.link/free-ebook/9781800562349 </a> </p>
