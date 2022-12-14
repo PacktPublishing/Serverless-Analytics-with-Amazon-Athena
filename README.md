@@ -1,3 +1,15 @@
+
+### Get this product for $5
+
+<i>Packt is having its biggest sale of the year. Get this eBook or any other book, video, or course that you like just for $5 each</i>
+
+
+<b><p align='center'>[Buy now](https://packt.link/9781800562349)</p></b>
+
+
+<b><p align='center'>[Buy similar titles for just $5](https://subscription.packtpub.com/search)</p></b>
+
+
 # Serverless Analytics with Amazon Athena
 
 <a href="https://www.packtpub.com/product/serverless-analytics-with-amazon-athena/9781800562349"><img src="https://static.packt-cdn.com/products/9781800562349/cover/smaller" alt="Power Query Cookbook" height="256px" align="right"></a>
