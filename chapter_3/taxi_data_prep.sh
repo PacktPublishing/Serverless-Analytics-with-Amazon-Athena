@@ -12,7 +12,7 @@ fi
 echo "using bucket: $BUCKET"
 set +x
 
-array=( yellow_tripdata_2018-01.csv 
+array=( yellow_tripdata_2018-01.csv
 		yellow_tripdata_2018-02.csv
 		yellow_tripdata_2018-03.csv
 		yellow_tripdata_2018-04.csv
@@ -48,7 +48,7 @@ do
 	FILE=$i
 	ZIP_FILE="${FILE}.gz"
 	echo "Downloading ${FILE} from nyc-tlc"
-	wget https://s3.amazonaws.com/nyc-tlc/trip+data/${FILE}
+	aws s3 cp s3://nyc-tlc/csv_backup/${FILE} .
 	echo "Performing gzip on ${FILE}"
 	gzip ${FILE}
 	echo "Uploading ${ZIP_FILE} to S3 bucket ${BUCKET}"
